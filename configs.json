@@ -1,0 +1,8 @@
+{
+	"port": 3000,
+	"ssl": true,
+	"certificate": {
+		"key": "./cert/server.key",
+		"cert": "./cert/server.crt"
+	}
+}

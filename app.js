@@ -1,14 +1,16 @@
-var server          = require('http').createServer()
-  , WebSocket       = require('./web_socket/web-socket').WebSocket
-  , express         = require('express')
-  , app             = express()
-  , port            = 3000;
+var	configs = require('./configs.json');
+var express = require('express');
+var app = express();
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/client/index.html');
+app.use(express.static(__dirname + '/client'));
+
+var Server = require('./server/server').Server;
+
+var server = new Server(configs, {
+	expressApp: app,
+	webSocket: true
 });
 
-var webSocket = new WebSocket(server);
-
-server.on('request', app);
-server.listen(port, function () { console.log('Listening on ' + server.address().port) });
+server.start(function(){
+	console.log("server started");
+});
