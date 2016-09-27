@@ -1,3 +1,5 @@
 node_modules
+journal
+diagnostic.data
 .vscode
 jsconfig.json
