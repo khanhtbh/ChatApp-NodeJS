@@ -12,9 +12,14 @@ var SERVER = {
 
 async.series({
 	initDB: function(callback) {
+		console.log("CONNECTING TO DATABASE...");
 		var db = new DB(configs.dbName);
 		SERVER.db = db; 
 		db.connect(function(err){
+			/* 
+				pass the connection err as the err param for callback, 
+				so if the database connection was failure, the start server function will not be call
+			*/
 			callback(err, {
 				err: err,
 				msg: !err ? "Connected to database" : "Failed to connect to database"
@@ -22,6 +27,7 @@ async.series({
 		});
 	},
 	startServer: function(callback) {
+		console.log("STARTING MAIN SERVER...");
 		var app = express();
 		app.use(express.static(__dirname + '/client'));
 
