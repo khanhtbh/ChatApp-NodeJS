@@ -28,12 +28,13 @@ async.waterfall([
 		var app = express();
 		app.use(express.static(__dirname + '/client'));
 		app.use(APIs());
+		
+		DB.find("Users", {userName: "kei"}, function(error, results){
+			console.log("test find user Kei, result: ", results);
+		});
 		var server = new Server(configs, {
 			expressApp: app,
 			webSocket: true
-		});
-		DB.find("Users", {userName: "kei"}, function(results){
-			console.log("test find user Kei, result: ", results);
 		});
 		server.start(function(){
 			callback(null, {

@@ -20,7 +20,6 @@ function Server(configs, options) {
 		this.serverInstance = require('http').createServer(options.expressApp);
 	}
 	if (this.serverInstance) {
-		this.serverInstance.on('request', options.expressApp);
 		if (options.webSocket) {
 			this.webSocket = new WebSocket(this.serverInstance);
 		}
