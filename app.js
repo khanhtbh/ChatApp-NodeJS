@@ -1,16 +1,16 @@
 var async = require('async');
 var express = require('express');
 
-var DB = require('./database/db').DB;
+var DB = require('./database/db');
 var Server = require('./server/server').Server;
+var APIs = require('./apis/apis');
 
 var	configs = require('./configs.json');
 
 async.waterfall([
 	function(callback) {
-		console.log("CONNECTING TO DATABASE...");
-		var db = new DB(configs.dbName);
-		db.connect(function(err){
+		console.log("CHECKING CONNECTION TO DATABASE...");
+		DB.checkConnect(function(err){
 			/* 
 				pass the connection err as the err param for callback, 
 				so if the database connection was failure, the start server function will not be call
@@ -18,31 +18,31 @@ async.waterfall([
 			var initDbResult = {
 				err: err,
 				msg: !err ? "Connected to database" : "Failed to connect to database",
-				DB: db
 			}
 			callback(err, initDbResult);
 		});
 	},
 	function(initDbResult, callback) {
+		console.log("CONNECTION TO DB IS OK!\n");
 		console.log("STARTING MAIN SERVER...");
 		var app = express();
 		app.use(express.static(__dirname + '/client'));
-
+		app.use(APIs());
 		var server = new Server(configs, {
 			expressApp: app,
 			webSocket: true
 		});
-		var db = initDbResult.DB;
+		DB.find("Users", {userName: "kei"}, function(results){
+			console.log("test find user Kei, result: ", results);
+		});
 		server.start(function(){
-			var searchResult = db.find("Users", {userName: "kei"});
-			console.log("Test Search on DB: ", searchResult);
 			callback(null, {
-				msg: "server started"
+				msg: "SERVER STARTED"
 			});
 		});
 	}
 ], function(err, results){
-	console.log("start server process result: \n", results);
+	console.log("START SERVER PROCESS RESULT: ", results);
 });
 
 
