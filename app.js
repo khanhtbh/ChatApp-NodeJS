@@ -1,9 +1,10 @@
-var async = require('async');
-var express = require('express');
+var async = require('async')
+  , bodyParser = require('body-parser')
+  , express = require('express');
 
-var DB = require('./database/db');
-var Server = require('./server/server').Server;
-var APIs = require('./apis/apis');
+var DB = require('./database/db')
+  , Server = require('./server/server').Server
+  , APIs = require('./apis/apis');
 
 var	configs = require('./configs.json');
 
@@ -25,17 +26,23 @@ async.waterfall([
 	function(initDbResult, callback) {
 		console.log("CONNECTION TO DB IS OK!\n");
 		console.log("STARTING MAIN SERVER...");
+
+
+
+
 		var app = express();
+		// configure app to use bodyParser()
+		// this will let us get the data from a POST
+		app.use(bodyParser.urlencoded({ extended: true }));
+		app.use(bodyParser.json());
 		app.use(express.static(__dirname + '/client'));
-		app.use(APIs());
-		
-		DB.find("Users", {userName: "kei"}, function(error, results){
-			console.log("test find user Kei, result: ", results);
-		});
+		app.use("/api", APIs());
+
 		var server = new Server(configs, {
 			expressApp: app,
 			webSocket: true
 		});
+		
 		server.start(function(){
 			callback(null, {
 				msg: "SERVER STARTED"

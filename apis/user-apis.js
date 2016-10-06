@@ -2,7 +2,7 @@ var express = require("express");
 var sys = require('util');
 var exec = require('child_process').exec;
 var Async = require('async');
-var DB = require('../database/db');
+var User = require('../business/user/user');
 
 var verifyUserMiddleware = function(req, res, next) {
     //TODO: Verify user here, 
@@ -12,18 +12,25 @@ var verifyUserMiddleware = function(req, res, next) {
 
 var userAPIs = {};
 
+userAPIs["/"] = function(req, res) {
+     switch (req.method) {
+        case "GET": {
+            User.find(function(err, users) {
+                if (err)
+                    res.send(err);
+                res.json(users);
+            });
+            break;
+        }
+    }
+}
+
 userAPIs["/:username"] = function(req, res) {
     if (req.params.username) {
         switch (req.method) {
             case "GET": {
                 var username = req.params.username;
-                DB.find("Users", {userName: username}, function(error, results){
-                    res.json({
-                        error: error,
-                        msg: "Test user API - username: " + username,
-                        searchResult: results
-                    });
-                });
+                
                 break;
             }
         }
