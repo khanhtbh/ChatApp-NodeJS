@@ -5,48 +5,37 @@ var Async = require('async');
 var User = require('../business/user/user');
 
 var verifyUserMiddleware = function(req, res, next) {
-    //TODO: Verify user here, 
+    //TODO: Verify user here, all APIs will require user_token in reques
     console.log("Verify user midleware");
     next();
 }
 
-var userAPIs = {};
+var router = express.Router();
 
-userAPIs["/"] = function(req, res) {
-     switch (req.method) {
-        case "GET": {
+router.route("/users")
+
+    .get(function(req, res)) {
+        process.nextTick(function () {
             User.find(function(err, users) {
                 if (err)
                     res.send(err);
                 res.json(users);
             });
-            break;
+        });
+        
+    })
+
+    /**
+     * Register new user POST /users
+     */
+    .post(function(req, res) {
+        var params = req.body;
+        if (params.username && params.password) {
+            var user = new User();
         }
-    }
-}
-
-userAPIs["/:username"] = function(req, res) {
-    if (req.params.username) {
-        switch (req.method) {
-            case "GET": {
-                var username = req.params.username;
-                
-                break;
-            }
-        }
-    }
-}
+        
+    });
+    //END Define APIs
 
 
-module.exports = function() {
-    console.log("User APIs init");
-    var router = express.Router();
-
-    //Verify user in every request
-    router.use(verifyUserMiddleware);
-    //Init API routes
-    for (var path in userAPIs) {
-        router.use(path, userAPIs[path]);
-    }
-    return router;
-}
+module.exports = router;

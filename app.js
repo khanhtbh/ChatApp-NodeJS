@@ -1,6 +1,8 @@
-var async = require('async')
-  , bodyParser = require('body-parser')
-  , express = require('express');
+var async 			= require('async')
+  , bodyParser 		= require('body-parser')
+  , express 		= require('express')
+  , cookieParser 	= require('cookie-parser')
+  , jwt 			= require('express-jwt');
 
 var DB = require('./database/db')
   , Server = require('./server/server').Server
@@ -27,15 +29,17 @@ async.waterfall([
 		console.log("CONNECTION TO DB IS OK!\n");
 		console.log("STARTING MAIN SERVER...");
 
-
-
-
 		var app = express();
+		//configure app to use cookieParser()
+		//this helps set cookie to response and get cookie from request quickly
+		app.use(cookieParser());
 		// configure app to use bodyParser()
-		// this will let us get the data from a POST
+		// this helps us get the data from a POST
 		app.use(bodyParser.urlencoded({ extended: true }));
 		app.use(bodyParser.json());
+
 		app.use(express.static(__dirname + '/client'));
+		//connect all APIs
 		app.use("/api", APIs());
 
 		var server = new Server(configs, {

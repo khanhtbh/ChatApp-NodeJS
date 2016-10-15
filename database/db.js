@@ -10,7 +10,9 @@ module.exports = {
 	checkConnect: function(callback) {
 		var me = this;
 		var db = mongoose.connection;
-		db.on('error', console.error.bind(console, 'connection error:'));
+		db.on('error', function () {
+			callback({error: arguments});		
+		});
 		db.once('open', function() {
 			callback(null);
 		});

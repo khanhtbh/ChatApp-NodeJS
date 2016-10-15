@@ -6,8 +6,12 @@
   "main": "app.js",
   "dependencies": {
     "async": "^2.0.1",
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.3",
     "express": "~4.13.1",
+    "express-jwt": "^5.1.0",
+    "jsonwebtoken": "^7.1.9",
     "mongodb": "^2.2.10",
     "mongoose": "^4.6.3",
     "waterfall": "^1.0.0",
