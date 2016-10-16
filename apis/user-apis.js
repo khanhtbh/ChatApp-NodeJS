@@ -37,6 +37,9 @@ router.route("/users")
             var user = new User();
             user.username = params.username;
             user.password = params.password;
+            if (params.email) {
+                user.email = params.email;
+            }
             process.nextTick(function() {
                 user.save(function (err) {
                     if (err) {
