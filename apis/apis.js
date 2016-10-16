@@ -7,6 +7,6 @@ module.exports = function() {
 	router.use(function(req, res, next){
 		next();
 	});
-	router.use(UserAPIs());
+	router.use(UserAPIs);
 	return router;
 }
