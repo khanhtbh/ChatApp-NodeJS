@@ -3,7 +3,9 @@ var mongoClient = require('mongodb').MongoClient;
 var	configs = require('../configs.json');
 
 var mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/" + configs.dbName);
+mongoose.connect("mongodb://localhost:27017/" + configs.dbName, {
+	useMongoClient: true
+});
 
 module.exports = {
 	dbName: configs.dbName,
