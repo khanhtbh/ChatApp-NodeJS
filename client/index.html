@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Websocket Chat </title>
-	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
 		$( document ).ready(function() {
 			$('form').submit(function(){
@@ -12,7 +12,7 @@
 				return false;
 			});
 			
-			ws = new WebSocket("ws://" + location.hostname + ":3000/");
+			ws = new WebSocket("wss://" + location.hostname + ":3000/");
 
       ws.onmessage = function(event) {
         $("#messages").append("<p>" + event.data + "</p>");
