@@ -2,7 +2,6 @@ var async 			= require('async')
   , bodyParser 		= require('body-parser')
   , express 		= require('express')
   , cookieParser 	= require('cookie-parser')
-  , jwt 			= require('express-jwt');
 
 var DB = require('./database/db')
   , Server = require('./server/server').Server

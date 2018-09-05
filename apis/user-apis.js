@@ -2,7 +2,7 @@ var express = require("express");
 var sys = require('util');
 var exec = require('child_process').exec;
 var Async = require('async');
-var User = require('../business/user/user');
+var User = require('../database/schemas/user');
 
 var verifyUserMiddleware = function(req, res, next) {
     //TODO: Verify user here, all APIs will require user_token in reques
@@ -12,9 +12,10 @@ var verifyUserMiddleware = function(req, res, next) {
 
 var router = express.Router();
 
-router.route("/users")
+router.route("/user")
 
     .get(function(req, res) {
+        console.log("Get User API is called");
         process.nextTick(function () {
             User.find(function(err, users) {
                 if (err)
@@ -25,7 +26,7 @@ router.route("/users")
     })
 
     /**
-     * Register new user - POST /users
+     * Register new user - POST /user
      * parameters:
      * + username (required)
      * + password (required)
@@ -59,6 +60,13 @@ router.route("/users")
             });
         }
     });
+
+router.route("/user/authenticate")
+    .post(function(req, res) {
+
+    });
+
+
     //END Define APIs
 
 

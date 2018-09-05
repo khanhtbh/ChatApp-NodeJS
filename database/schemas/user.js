@@ -5,14 +5,14 @@
 	+ ....
 */
 
-var mongoose     = require('mongoose');
-var bcrypt 		 = require("bcryptjs");
-var Schema       = mongoose.Schema;
+var mongoose = require('mongoose');
+var bcrypt = require("bcryptjs");
+var Schema = mongoose.Schema;
 
 //The collection name in MongoDB
 var DBCollectionName = 'Users';
 
-var UserSchema   = new Schema({
+var UserSchema = new Schema({
     username: {
         type: String,
         unique: true,
@@ -24,10 +24,15 @@ var UserSchema   = new Schema({
         required: true
     },
 
-	email: {
-		type: String,
-		require: false
-	},
+    email: {
+        type: String,
+        require: false
+    },
+
+    gender: {
+        type: Number,
+        require: false
+    },
 
     location: {
         lat: {
@@ -36,7 +41,7 @@ var UserSchema   = new Schema({
         lng: {
             type: Number
         }
-    }    
+    }
 
 });
 
@@ -60,7 +65,7 @@ UserSchema.pre('save', function (next) {
     }
 });
 
-UserSchema.methods.comparePassword = function (passw, cb) {
+UserSchema.static.comparePassword = function (passw, cb) {
     bcrypt.compare(passw, this.password, function (err, isMatch) {
         if (err) {
             return cb(err);
