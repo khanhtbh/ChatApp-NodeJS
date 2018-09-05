@@ -1,5 +1,4 @@
 var WebSocketServer = require("ws").Server;
-var url 			= require('url')
 
 /**
  * 
@@ -18,14 +17,15 @@ function WebSocket(server) {
 	this.wss = new WebSocketServer({server: server});
 
 	var me = this;
-	this.wss.on('connection', function connection(ws) {
-		var location = url.parse(ws.upgradeReq.url, true);
-		console.log("connected socket: ", ws.upgradeReq.url);
-		me.clients.push(ws);
+	this.wss.on('connection', function connection(ws, incomingMsg) {
 		// console.log("Connected clients: ", me.clients);
 		// Check this ws.upgradeReq.headers.cookie for cookies
 		// you might use location.query.access_token to authenticate or share sessions
 		// or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
+
+		//NEW Check headers in incomingMsg for cookie
+		me.clients.push(ws);
+
 
 		ws.on('message', function incoming(message) {
 			console.log('received: %s', message);

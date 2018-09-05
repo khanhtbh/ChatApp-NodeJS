@@ -4,15 +4,9 @@ var exec = require('child_process').exec;
 var Async = require('async');
 var User = require('../database/schemas/user');
 
-var verifyUserMiddleware = function(req, res, next) {
-    //TODO: Verify user here, all APIs will require user_token in reques
-    console.log("Verify user midleware");
-    next();
-}
-
 var router = express.Router();
 
-router.route("/user")
+router.route("/users")
 
     .get(function(req, res) {
         console.log("Get User API is called");
@@ -61,7 +55,7 @@ router.route("/user")
         }
     });
 
-router.route("/user/authenticate")
+router.route("/user/login")
     .post(function(req, res) {
 
     });
