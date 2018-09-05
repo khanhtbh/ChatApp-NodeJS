@@ -1,5 +1,3 @@
-var assert = require('assert');
-var mongoClient = require('mongodb').MongoClient;
 var	configs = require('../configs.json');
 
 var mongoose = require('mongoose');

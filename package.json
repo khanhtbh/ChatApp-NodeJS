@@ -9,11 +9,12 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
-    "express": "^4.13.4",
+    "express": "^4.16.3",
     "jsonwebtoken": "^7.1.9",
+    "lodash": "^4.17.10",
     "mongodb": "^2.2.36",
     "mongoose": "^4.13.17",
-    "ws": "^1.1.5"
+    "ws": "^6.0.0"
   },
   "engines": {
     "node": "8.11.1"
