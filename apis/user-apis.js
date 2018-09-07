@@ -39,7 +39,7 @@ router.route("/users")
                 user.save(function (err) {
                     if (err) {
                         res.json({
-                            error: error
+                            error: err
                         });
                     } else {
                         res.json({

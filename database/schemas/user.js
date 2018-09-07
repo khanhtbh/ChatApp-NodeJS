@@ -45,9 +45,6 @@ var UserSchema = new Schema({
 
 });
 
-/*
-
-client should hash password before submiting to server
 
 UserSchema.pre('save', function (next) {
     var user = this;
@@ -68,7 +65,7 @@ UserSchema.pre('save', function (next) {
         return next();
     }
 });
-*/
+
 
 UserSchema.static.comparePassword = function (passw, cb) {
     bcrypt.compare(passw, this.password, function (err, isMatch) {
