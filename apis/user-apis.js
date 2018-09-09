@@ -1,21 +1,21 @@
 var express = require("express");
-var sys = require('util');
-var exec = require('child_process').exec;
-var Async = require('async');
-var User = require('../database/schemas/user');
+var configs = require("../configs.json");
+var User = require("../database/schemas/user");
+var jwt = require("jsonwebtoken");
+var apiCodes = require("./error-codes");
+var respond = require("./api-utils").apiRespond;
 
 var router = express.Router();
 
 router.route("/users")
 
     .get(function(req, res) {
-        console.log("Get User API is called");
-        process.nextTick(function () {
-            User.find(function(err, users) {
-                if (err)
-                    res.send(err);
-                res.json(users);
-            });
+        User.find(function(err, users) {
+            if (err) {
+                res.apiRespond(apiCodes.unknownErr, "Error", {});
+            } else {
+                res.apiRespond(apiCodes.success, "Success", users);
+            }          
         });
     })
 
@@ -35,18 +35,12 @@ router.route("/users")
             if (params.email) {
                 user.email = params.email;
             }
-            process.nextTick(function() {
-                user.save(function (err) {
-                    if (err) {
-                        res.json({
-                            error: err
-                        });
-                    } else {
-                        res.json({
-                            registed_user: user
-                        });
-                    }
-                });
+            user.save(function (err) {
+                if (err) {
+                    res.apiRespond(err.code, err.errmsg, {});
+                } else {
+                    res.apiRespond(apiCodes.success, "Success", {registed_user: user});
+                }
             });
         } else {
             res.json({
@@ -55,9 +49,32 @@ router.route("/users")
         }
     });
 
-router.route("/user/login")
+router.route("/authenticate")
     .post(function(req, res) {
-
+        var params = req.body;
+        if (params.username && params.password) {
+            User.findOne({username: params.username}, function (error, user) {
+                if (error) {
+                    res.json({
+                        code: apiCodes.notFoundErr,
+                        message: "User not found"
+                    });
+                } else {
+                    delete user.password;
+                    var token = jwt.sign(user.username, configs.secretKey, {
+                        expiresInMinutes: 1440 // expires in 24 hours
+                    }); 
+                    res.json({
+                        code: apiCodes.success,
+                        message: "success",
+                        data: {
+                            user: user,
+                            token: token
+                        }
+                    });
+                }
+            });
+        } 
     });
 
 
