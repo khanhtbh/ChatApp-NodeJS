@@ -12,7 +12,7 @@ router.route("/users")
     .get(function(req, res) {
         User.find(function(err, users) {
             if (err) {
-                res.apiRespond(apiCodes.unknownErr, "Error", {});
+                res.apiRespond(apiCodes.generalErr, "Error", {});
             } else {
                 res.apiRespond(apiCodes.success, "Success", users);
             }          
@@ -43,9 +43,7 @@ router.route("/users")
                 }
             });
         } else {
-            res.json({
-                errorMsg: "Username and password are required"
-            });
+            res.apiRespond(apiCodes.generalErr, "Username and password are required", {});
         }
     });
 
@@ -55,23 +53,26 @@ router.route("/authenticate")
         if (params.username && params.password) {
             User.findOne({username: params.username}, function (error, user) {
                 if (error) {
-                    res.json({
-                        code: apiCodes.notFoundErr,
-                        message: "User not found"
-                    });
+                    res.apiRespond(apiCodes.notFoundErr, "User not found", {});
                 } else {
-                    delete user.password;
-                    var token = jwt.sign(user.username, configs.secretKey, {
-                        expiresInMinutes: 1440 // expires in 24 hours
-                    }); 
-                    res.json({
-                        code: apiCodes.success,
-                        message: "success",
-                        data: {
-                            user: user,
-                            token: token
+                    user.comparePassword(params.password, function(err, isMatch) {
+                        if (isMatch) {
+                            user.password = undefined;
+                            var payload = {
+                                username: user.username
+                            }
+                            var token = jwt.sign(payload, configs.secretKey, {
+                                expiresIn: '2 days'
+                            }); 
+                            res.apiRespond(apiCodes.success, "Success", {
+                                user: user,
+                                token: token
+                            });
+                        } else {
+                            res.apiRespond(apiCodes.wrongPassword, "Wrong password", {});
                         }
                     });
+                    
                 }
             });
         } 
