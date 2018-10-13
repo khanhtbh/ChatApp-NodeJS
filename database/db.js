@@ -2,7 +2,8 @@ var	configs = require('../configs.json');
 
 var mongoose = require('mongoose');
 mongoose.connect("mongodb://chatAppDbUser:userPass123@localhost:27017/" + configs.dbName, {
-	useMongoClient: true
+	useCreateIndex: true,
+	useNewUrlParser: true
 });
 
 module.exports = {
