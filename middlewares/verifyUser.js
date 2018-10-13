@@ -2,6 +2,7 @@ var respond = require("../apis/api-utils").apiRespond;
 var apiCodes = require("../apis/error-codes");
 var configs = require("../configs.json");
 var jwt = require("jsonwebtoken");
+var User = require("../database/schemas/user");
 
 var checkToken = function(req, res, next) {
     var token = req.headers['x-access-token'];
@@ -10,7 +11,14 @@ var checkToken = function(req, res, next) {
             if (err) {
                 res.apiRespond(apiCodes.unauthorized, "Unauthorized", {});
             } else {
-                next();
+                User.findById(decoded.id, function (error, user) {
+                    if (user) {
+                        next();
+                    } else {
+                        res.apiRespond(apiCodes.notFoundErr, "User Not Found", {});
+                    }
+                });
+                
             }
         });
     } else {

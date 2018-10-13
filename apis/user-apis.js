@@ -59,6 +59,7 @@ router.route("/authenticate")
                         if (isMatch) {
                             user.password = undefined;
                             var payload = {
+                                id: user.id,
                                 username: user.username
                             }
                             var token = jwt.sign(payload, configs.secretKey, {
