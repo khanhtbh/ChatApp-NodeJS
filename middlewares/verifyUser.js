@@ -1,5 +1,5 @@
-var respond = require("../apis/api-utils").apiRespond;
-var apiCodes = require("../apis/error-codes");
+var respond = require("../utils/api-utils").apiRespond;
+var apiCodes = require("../constants/error-codes");
 var configs = require("../configs.json");
 var jwt = require("jsonwebtoken");
 var User = require("../database/schemas/user");

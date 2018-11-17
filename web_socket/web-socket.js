@@ -22,6 +22,13 @@ function WebSocket(server) {
 			}
 		});
 
+		ws.on('close', function close() {
+			var index = me.clients.indexOf(this);
+			if (index != -1) {
+				me.clients.splice(index, 1);
+			}
+		});
+
 		ws.send('You connected to our server');
 	});
 }
