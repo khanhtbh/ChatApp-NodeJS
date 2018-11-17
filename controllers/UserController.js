@@ -48,9 +48,11 @@ module.exports = {
         if (params.username && params.password) {
             User.findOne({username: params.username}, function (error, user) {
                 if (error) {
-                    res.apiRespond(apiCodes.notFoundErr, "User not found", {});
-                } else {
-                    user.comparePassword(params.password, function(err, isMatch) {
+                    res.apiRespond(apiCodes.generalErr, "Something went wrong", {});
+                } 
+                else if (user) {
+                    try {
+                        let isMatch = user.comparePassword(params.password);
                         if (isMatch) {
                             user.password = undefined;
                             var payload = {
@@ -67,8 +69,13 @@ module.exports = {
                         } else {
                             res.apiRespond(apiCodes.wrongPassword, "Wrong password", {});
                         }
-                    });
-                    
+                    }
+                    catch (e) {
+                        res.apiRespond(apiCodes.generalErr, "Something went wrong", {});
+                    }
+                }
+                else {
+                    res.apiRespond(apiCodes.notFoundErr, "User not found", {});
                 }
             });
         } 

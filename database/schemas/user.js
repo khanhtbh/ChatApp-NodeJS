@@ -67,13 +67,17 @@ UserSchema.pre('save', function (next) {
 });
 
 
-UserSchema.methods.comparePassword = function (passw, cb) {
-    bcrypt.compare(passw, this.password, function (err, isMatch) {
-        if (err) {
-            return cb(err, false);
-        }
-        cb(null, isMatch);
+UserSchema.methods.comparePassword = async function (passw) {
+    let promise = new Promise((resolve, reject) => {
+        bcrypt.compare(passw, this.password, function (err, isMatch) {
+            if (err) {
+                reject(err);
+            }
+            resolve(isMatch);
+        });
     });
+    let isMatch = await promise;
+    return isMatch;
 };
 
 //Map User schema to Users collection
