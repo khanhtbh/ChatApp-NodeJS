@@ -9,7 +9,6 @@ mongoose.connect("mongodb://chatAppDbUser:userPass123@localhost:27017/" + config
 module.exports = {
 	dbName: configs.dbName,
 	checkConnect: function(callback) {
-		var me = this;
 		var db = mongoose.connection;
 		db.on('error', function () {
 			callback({error: arguments});		
