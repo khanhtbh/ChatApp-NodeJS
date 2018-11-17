@@ -1,4 +1,4 @@
-var respond = require("../utils/api-utils").apiRespond;
+require("../utils/api-utils").apiRespond;
 var apiCodes = require("../constants/error-codes");
 var configs = require("../configs.json");
 var jwt = require("jsonwebtoken");

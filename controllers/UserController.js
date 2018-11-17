@@ -2,7 +2,7 @@ var configs = require("../configs.json");
 var User = require("../database/schemas/user");
 var jwt = require("jsonwebtoken");
 var apiCodes = require("../constants/error-codes");
-var respond = require("../utils/api-utils").apiRespond;
+require("../utils/api-utils").apiRespond;
 
 module.exports = {
     findAllUser: function(req, res) {
